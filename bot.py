@@ -1,5 +1,3 @@
-import logging
-import re
 import threading
 import time
 import random
@@ -25,6 +23,16 @@ import telebot
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton, ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemove
 import telebot.types
 
+
+def _safe_inline_keyboard_button(*args, **kwargs):
+    """Compatibility wrapper: ignore unsupported `style` kwarg."""
+    kwargs.pop("style", None)
+    return telebot.types.InlineKeyboardButton(*args, **kwargs)
+
+
+InlineKeyboardButton = _safe_inline_keyboard_button
+
+
 @classmethod
 def _disable_story(cls, obj):
     # Telegram stories completely ignored
@@ -40,6 +48,7 @@ from pyrogram.errors import (
     PhoneCodeExpired, SessionPasswordNeeded, PasswordHashInvalid,
     FloodWait, PhoneCodeEmpty
 )
+
 
 # ---------------------------------------------------------------------
 # CONFIG
