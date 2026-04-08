@@ -50,12 +50,15 @@ from pyrogram.errors import (
 )
 
 
+
 # ---------------------------------------------------------------------
 # CONFIG
 # ---------------------------------------------------------------------
 
 BOT_TOKEN = os.getenv('BOT_TOKEN', '8588199256:AAGUjtP_MvXCUGctOoBfMX1-eG2nV3ATCwY')
-ADMIN_ID = int(os.getenv('ADMIN_ID', '6042317029, 8441236350'))
+_raw_admin_id = os.getenv('ADMIN_ID', '6042317029,8441236350')
+_admin_candidates = [x.strip() for x in _raw_admin_id.split(',') if x.strip().isdigit()]
+ADMIN_ID = int(_admin_candidates[0]) if _admin_candidates else 6042317029
 MONGO_URL = os.getenv('MONGO_URL', 'mongodb+srv://bsdk:betichod@cluster0.fgj1r9z.mongodb.net/?retryWrites=true&w=majority' )
 API_ID = int(os.getenv('API_ID', '36326629'))
 API_HASH = os.getenv('API_HASH', '823e6e8c081fe363e6d739b39dc19e07')
@@ -97,6 +100,8 @@ E_HEART = "🩷"
 # INIT
 # ---------------------------------------------------------------------
 
+import logging as _logging
+logging = _logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 START_TIME = time.time()
