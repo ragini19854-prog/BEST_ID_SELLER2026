@@ -45,7 +45,7 @@ from pyrogram.errors import (
 
 BOT_TOKEN = os.getenv('BOT_TOKEN', '8588199256:AAGUjtP_MvXCUGctOoBfMX1-eG2nV3ATCwY')
 ADMIN_ID = int(os.getenv('ADMIN_ID', '6042317029, 8441236350'))
-MONGO_URL = os.getenv('MONGO_URL', )
+MONGO_URL = os.getenv('MONGO_URL', 'mongodb+srv://bsdk:betichod@cluster0.fgj1r9z.mongodb.net/?retryWrites=true&w=majority' )
 API_ID = int(os.getenv('API_ID', '36326629'))
 API_HASH = os.getenv('API_HASH', '823e6e8c081fe363e6d739b39dc19e07')
 
