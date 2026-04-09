@@ -44,7 +44,9 @@ from pyrogram.errors import (
 # ---------------------------------------------------------------------
 
 BOT_TOKEN = os.getenv('BOT_TOKEN', '8588199256:AAGUjtP_MvXCUGctOoBfMX1-eG2nV3ATCwY')
-ADMIN_ID = int(os.getenv('ADMIN_ID', '6042317029')
+_raw_admin_id = os.getenv('ADMIN_ID', '6042317029')
+# Accept either a single ID or a comma-separated value and use the first one as primary admin.
+ADMIN_ID = int(_raw_admin_id.split(',')[0].strip())
 MONGO_URL = os.getenv('MONGO_URL', 'mongodb+srv://bsdk:betichod@cluster0.fgj1r9z.mongodb.net/?retryWrites=true&w=majority')
 API_ID = int(os.getenv('API_ID', '36326629')
 API_HASH = os.getenv('API_HASH', '823e6e8c081fe363e6d739b39dc19e07')
