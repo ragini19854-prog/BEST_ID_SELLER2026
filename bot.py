@@ -5,6 +5,7 @@ import time
 import random
 import sys
 import os
+import fcntl
 from datetime import datetime, timedelta
 from bson import ObjectId
 import asyncio
@@ -93,6 +94,24 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 logger = logging.getLogger(__name__)
 
 bot = telebot.TeleBot(BOT_TOKEN)
+
+# Single-instance process lock (prevents accidental double polling in same host/container)
+_instance_lock_file = None
+
+def acquire_single_instance_lock():
+    """Ensure only one bot process runs per container/host."""
+    global _instance_lock_file
+    lock_path = "/tmp/gms_otp_bot.lock"
+    _instance_lock_file = open(lock_path, "w")
+    try:
+        fcntl.flock(_instance_lock_file, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        _instance_lock_file.write(str(os.getpid()))
+        _instance_lock_file.flush()
+        logger.info(f"✅ Instance lock acquired: {lock_path}")
+        return True
+    except BlockingIOError:
+        logger.error("❌ Another bot process is already running (lock busy). Exiting this instance.")
+        return False
 
 # MongoDB Setup
 try:
@@ -4917,6 +4936,9 @@ def chat_handler(msg):
 # ---------------------------------------------------------------------
 
 if __name__ == "__main__":
+     if not acquire_single_instance_lock():
+        sys.exit(1)
+
     logger.info(f"🤖 Fixed OTP Bot Starting...")
     logger.info(f"Admin ID: {ADMIN_ID}")
     logger.info(f"Bot Token: {BOT_TOKEN[:10]}...")
@@ -4941,9 +4963,11 @@ if __name__ == "__main__":
     except Exception as e:
         logger.error(f"❌ Failed to create admin indexes: {e}")
     
-    try:
-        bot.infinity_polling(timeout=60, long_polling_timeout=60)
-    except Exception as e:
-        logger.error(f"Bot error: {e}")
-        time.sleep(30)
-bot.infinity_polling(timeout=60, long_polling_timeout=60)
+    while True:
+        try:
+            bot.infinity_polling(timeout=60, long_polling_timeout=60)
+        except Exception as e:
+            logger.error(f"Bot polling error: {e}")
+            # 409 happens when another instance is still polling this token.
+            # Keep retrying with delay so bot auto-recovers after old instance stops.
+            time.sleep(30)
