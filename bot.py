@@ -43,17 +43,17 @@ from pyrogram.errors import (
 # CONFIG
 # ---------------------------------------------------------------------
 
-BOT_TOKEN = os.getenv('BOT_TOKEN', '8758505666:AAElWp1mZQlOHd3xOCKakQYRCiIXKrT9igQ')
-ADMIN_ID = int(os.getenv('ADMIN_ID', '8575496524'))
-MONGO_URL = os.getenv('MONGO_URL', 'mongodb+srv://ADIAZAZ67889:ADIAZAZ67889@cluster0.rr1kvuw.mongodb.net/?appName=Cluster0')
-API_ID = int(os.getenv('API_ID', '36330071'))
-API_HASH = os.getenv('API_HASH', '7cf95f082395bcf3d2e7c4a4a27f3ef5')
+BOT_TOKEN = os.getenv('BOT_TOKEN', '8588199256:AAGUjtP_MvXCUGctOoBfMX1-eG2nV3ATCwY')
+ADMIN_ID = int(os.getenv('ADMIN_ID', '6042317029, 8441236350')
+MONGO_URL = os.getenv('MONGO_URL', 'mongodb+srv://bsdk:betichod@cluster0.fgj1r9z.mongodb.net/?retryWrites=true&w=majority')
+API_ID = int(os.getenv('API_ID', '36326629'))
+API_HASH = os.getenv('API_HASH', '823e6e8c081fe363e6d739b39dc19e07')
 
 # MUST JOIN CHANNELS - TWO CHANNELS
-MUST_JOIN_CHANNEL_1 = "@ADI_OTP_SUPPORT"
-MUST_JOIN_CHANNEL_2 = "@ADI_SUPPORT_GROUP"
+MUST_JOIN_CHANNEL_1 = "@GMS_COMEBACK_SOON1"
+MUST_JOIN_CHANNEL_2 = "@GMS_GMS_GMS"
 # LOG CHANNEL
-LOG_CHANNEL_ID = "-1003557056482"
+LOG_CHANNEL_ID = "-1003802534246"
 
 # Referral commission percentage
 REFERRAL_COMMISSION = 1.5
