@@ -1229,18 +1229,20 @@ E_HEART_TG    = "<tg-emoji emoji-id='6123125485661591081'>🩷</tg-emoji>"
 _cached_sticker_ids = []
 
 def _get_random_sticker_file_id():
-    """Fetch sticker set once via Bot API and return a random sticker file_id"""
+    """Fetch sticker set once via Bot API and return a random custom_emoji_id"""
     global _cached_sticker_ids
     if not _cached_sticker_ids:
         try:
             sticker_set = bot.get_sticker_set(PREMIUM_STICKER_PACK)
-            _cached_sticker_ids = [s.file_id for s in sticker_set.stickers]
-            logger.info(f"✅ Loaded {len(_cached_sticker_ids)} stickers from {PREMIUM_STICKER_PACK}")
+            # Yahan file_id ki jagah custom_emoji_id fetch karna hai
+            _cached_sticker_ids = [s.custom_emoji_id for s in sticker_set.stickers if s.custom_emoji_id]
+            logger.info(f"✅ Loaded {len(_cached_sticker_ids)} emojis from {PREMIUM_STICKER_PACK}")
         except Exception as e:
             logger.error(f"Failed to fetch sticker set: {e}")
     if _cached_sticker_ids:
         return random.choice(_cached_sticker_ids)
     return None
+    
 
 def run_premium_intro(user_id):
     """Send animated intro with premium custom emoji + random sticker via Bot API"""
@@ -1257,10 +1259,15 @@ def run_premium_intro(user_id):
             parse_mode='HTML'
         )
 
-        # Send a random sticker from the premium sticker pack
-        sticker_file_id = _get_random_sticker_file_id()
-        if sticker_file_id:
-            bot.send_sticker(user_id, sticker_file_id)
+        # Custom emoji ID nikalenge aur usey send_message se HTML format mein bhejenge
+        custom_emoji_id = _get_random_sticker_file_id()
+        if custom_emoji_id:
+            bot.send_message(
+                user_id, 
+                f"<tg-emoji emoji-id='{custom_emoji_id}'>✨</tg-emoji>", 
+                parse_mode='HTML'
+            )
+
     except Exception as e:
         logger.error(f"Premium intro error: {e}")
         try:
@@ -1275,7 +1282,7 @@ def run_premium_intro(user_id):
             bot.delete_message(user_id, m3.message_id)
         except:
             pass
-
+            
 # ---------------------------------------------------------------------
 # BOT HANDLERS - UPDATED WITH TWO CHANNELS
 # ---------------------------------------------------------------------
