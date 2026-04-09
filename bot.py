@@ -1125,25 +1125,25 @@ def clean_ui_and_send_menu(chat_id, user_id, text=None, markup=None):
             markup = InlineKeyboardMarkup(row_width=2)
             # Row 1: 2 buttons
             markup.add(
-                InlineKeyboardButton("🛍️ Buy Account", callback_data="buy_account", style="success"),
-                InlineKeyboardButton("💎 My Balance", callback_data="balance", style="primary")
+                InlineKeyboardButton("🛍️ Buy Account", callback_data="buy_account"),
+                InlineKeyboardButton("💎 My Balance", callback_data="balance")
             )
             # Row 2: 1 button
             markup.add(
-                InlineKeyboardButton("💸 Add Funds", callback_data="recharge", style="success")
+                InlineKeyboardButton("💸 Add Funds", callback_data="recharge")
             )
             # Row 3: 2 buttons
             markup.add(
-                InlineKeyboardButton("🤝 Refer & Earn", callback_data="refer_friends", style="primary"),
-                InlineKeyboardButton("🎁 Redeem Coupon", callback_data="redeem_coupon", style="danger")
+                InlineKeyboardButton("🤝 Refer & Earn", callback_data="refer_friends"),
+                InlineKeyboardButton("🎁 Redeem Coupon", callback_data="redeem_coupon")
             )
             # Row 4: 1 button
             markup.add(
-                InlineKeyboardButton("🆘 Support", callback_data="support", style="primary")
+                InlineKeyboardButton("🆘 Support", callback_data="support")
             )
             # Row 5: 1 button (only for admin)
             if is_admin(user_id):
-                markup.add(InlineKeyboardButton("⚡ Admin Panel", callback_data="admin_panel", style="danger"))
+               markup.add(InlineKeyboardButton("⚡ Admin Panel", callback_data="admin_panel"))
 
         menu_text = text or caption
         
