@@ -1227,14 +1227,16 @@ def run_premium_intro(user_id):
     """Send animated intro with premium custom emoji + random sticker via Bot API"""
     try:
         m1 = bot.send_message(user_id, f"{E_MAGIC_TG} Hlo Sir......", parse_mode='HTML')
-        time.sleep(1)
+        time.sleep(0.8)
         bot.delete_message(user_id, m1.message_id)
         m2 = bot.send_message(user_id, f"{E_DEVIL_TG} Ping Pong........", parse_mode='HTML')
-        time.sleep(1)
+        time.sleep(0.8)
         bot.delete_message(user_id, m2.message_id)
-        m3 = bot.send_message(user_id, f"{E_CROWN_TG} Gms OP......", parse_mode='HTML')
-        time.sleep(1)
-        bot.delete_message(user_id, m3.message_id)
+        bot.send_message(
+            user_id,
+            f"{E_CROWN_TG} <b>Premium Emojis Ready!</b> {E_DIAMOND_TG}",
+            parse_mode='HTML'
+        )
 
         # Send a random sticker from the premium sticker pack
         sticker_file_id = _get_random_sticker_file_id()
@@ -1320,8 +1322,8 @@ Click the buttons below to join both channels, then press VERIFY ✅"""
     
     ensure_user_exists(user_id, msg.from_user.first_name, msg.from_user.username, referred_by)
 
-    # Animated intro with real premium emoji via premium account
-    run_premium_intro(user_id)
+    # Premium intro in background so /start UI stays responsive
+    threading.Thread(target=run_premium_intro, args=(user_id,), daemon=True).start()
 
     clean_ui_and_send_menu(user_id, user_id)
 
@@ -1335,6 +1337,11 @@ def handle_callbacks(call):
         return
     
     logger.info(f"Callback received: {data} from user {user_id}")
+    # Acknowledge callback quickly to avoid stuck loading spinner on button clicks.
+    try:
+        bot.answer_callback_query(call.id)
+    except Exception:
+        pass
     
     try:
         if data == "verify_join":
